@@ -12,8 +12,7 @@ services:
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
 
-  frontend:
-    container_name: frontend
+  app:
     build:
       dockerfile: Dockerfile
     depends_on:
@@ -21,19 +20,19 @@ services:
     volumes:
       - ./:/home/node/app
     ports:
-      - 8000:80
-    restart: always
+      - 8080:8080
+    restart: on-failure
     environment:
       DB_HOST: db:3306
       DB_USER: "${MYSQL_USER}"
       DB_PASSWORD: "${MYSQL_PASSWORD}"
       DB_NAME: "${MYSQL_DATABASE}"
 
-  phpmyadmin:
+  pma:
     image: phpmyadmin
     restart: always
     ports:
-      - 8080:80
+      - 8081:80
     environment:
       PMA_ARBITRARY: 1
       PMA_HOST: db
