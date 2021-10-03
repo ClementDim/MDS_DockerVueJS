@@ -5,20 +5,14 @@
 yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+### .Env config 
 
-### Compiles and minifies for production
-```
-yarn build
-```
+MYSQL_DATABASE=test
+MYSQL_ROOT_PASSWORD=test
+MYSQL_USER=test
+MYSQL_PASSWORD=test
+DB_PASSWORD=test
 
-### Lints and fixes files
-```
-yarn lint
-```
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

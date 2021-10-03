@@ -1,18 +1,14 @@
-FROM node:lts-alpine
-
-# installation de vue cli
-RUN yarn global add @vue/cli
-
-# définit le dossier 'front-end' comme dossier de travail
+# build stage
+FROM node:lts-alpine as build-stage
 WORKDIR /app
-
-# copie 'package.json' et 'package-lock.json' (si disponible)
 COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-# installe les dépendances du projet
-RUN yarn install
 
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 8080
-
-# construit l'front-end pour la production en la minifiant
-CMD yarn serve
+CMD ["nginx", "-g", "daemon off;"]
