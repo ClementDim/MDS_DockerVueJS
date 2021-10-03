@@ -1,44 +1,71 @@
 version: "3.3"
-
+# use docker-compose v3.3 for Linux Ubuntu 
 services:
+  #First service, db (~~database)
   db:
+    # From mysql official image (V5.7)
     image: mysql:5.7
+    # Create volume for db
+    ## local dir : ./db_data
+    ## container dir : /var/lib/mysql
     volumes:
       - ./db_data:/var/lib/mysql
-    restart: always
+    # if container crash, restart on failure
+    restart: on-failure
+    # set environment var
+    ## using .env var for setting
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
 
-  app:
-    build:
-      dockerfile: Dockerfile
-      context: ./
-    depends_on:
-      - db
-    volumes:
-      - .:/home/node/
-    ports:
-      - 80:80
-    restart: on-failure
-    environment:
-      DB_HOST: db:3306
-      DB_USER: "${MYSQL_USER}"
-      DB_PASSWORD: "${MYSQL_PASSWORD}"
-      DB_NAME: "${MYSQL_DATABASE}"
-
+  # second service, pma (~~SGBD, PhpMyAdmin)
   pma:
-    image: phpmyadmin
-    restart: always
+    # from phpmyadmin offical image (V.5.1.1), using apache
+    image: phpmyadmin:5.1.1-apache
+    # if container crash, restart on failure
+    restart: on-failure
+    # routing ports: 8081 (local) to 8080 (container)
     ports:
-      - 8080:8080
+      - 8081:8080
+    # set environment var
+    ## using .env var for setting
     environment:
       PMA_ARBITRARY: 1
       PMA_HOST: db
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD : "${DB_PASSWORD}"
 
+  # last service: app
+  app:
+    # build from Dockerfile
+    build:
+      dockerfile: Dockerfile
+      #  in dir ./
+      # setting context (beacause using docker-compose v3.3)
+      context: ./
+    # setting database depend to be sure that the base is accessible 
+    depends_on:
+      - db
+    # Create volume
+    ## local : ./
+    ## container : /home/node/
+    volumes:
+      - .:/home/node/
+    # routing ports: 8000 (local) to 8080 (container)
+    ports:
+      - 80:80
+    # if container crash, restart on failure
+    restart: on-failure
+    # set environment var
+    ## using .env var for setting
+    environment:
+      DB_HOST: db:3306
+      DB_USER: "${MYSQL_USER}"
+      DB_PASSWORD: "${MYSQL_PASSWORD}"
+      DB_NAME: "${MYSQL_DATABASE}"
+
+# creation of the necessary volumes  
 volumes:
   db_data:
