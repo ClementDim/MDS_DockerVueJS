@@ -1,18 +1,26 @@
-# app
+# Dockerize VueJS project with MySql database
+
+## .Env config 
+
+```
+MYSQL_DATABASE=%enter database name%
+MYSQL_ROOT_PASSWORD=%enter database root password%
+MYSQL_USER= %enter database user name%
+MYSQL_PASSWORD= %enter database user password%
+DB_PASSWORD=%enter database password%
+```
 
 ## Project setup
+
 ```
-yarn install
+docker-compose up --build
 ```
 
-### .Env config 
 
-MYSQL_DATABASE=test
-MYSQL_ROOT_PASSWORD=test
-MYSQL_USER=test
-MYSQL_PASSWORD=test
-DB_PASSWORD=test
+### Ports
 
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```
+Database (Mysql) : ::3306
+App (VueJS): ::80
+SGBD (PhpMyAdmin): ::8080
+```
