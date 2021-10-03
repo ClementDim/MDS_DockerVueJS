@@ -1,6 +1,7 @@
 version: "3.3"
 # use docker-compose v3.3 for Linux Ubuntu 
 services:
+
   #First service, db (~~database)
   db:
     # From mysql official image (V5.7)
@@ -22,8 +23,8 @@ services:
 
   # second service, pma (~~SGBD, PhpMyAdmin)
   pma:
-    # from phpmyadmin offical image (V.5.1.1), using apache
-    image: phpmyadmin:5.1.1-apache
+    # from phpmyadmin offical image (V.5.1.1), using alpine
+    image: phpmyadmin:5.1.1-fpm-alpine
     # if container crash, restart on failure
     restart: on-failure
     # routing ports: 8081 (local) to 8080 (container)
