@@ -1,5 +1,12 @@
 # Dockerize VueJS project with MySql database
 
+## Co-author
+```
+Jeff Registre
+github code : Jeff509 
+```
+
+
 ## .Env config 
 
 ```
